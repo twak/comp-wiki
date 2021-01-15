@@ -1,0 +1,79 @@
+<html>
+<body>
+
+<p>Minerva</p>
+
+<p>
+<a href="http://www.leeds.ac.uk/vle/">IT's Minerva documentation</a>. Uploading hundreds of grades is non-trivial,  you can use the <a href="http://www.leeds.ac.uk/vle/staff/assess/gradecentre/gc02.htm">spreadsheet interface</a> for downloading and uploading marks,  <a href="https://vcg.leeds.ac.uk/wp-content/uploads/2020/01/grade_centre_feedback_files.pdf">or try a dubious method for the bulk upload feedback</a> (you still have to create a folder for every student).
+</p>
+
+
+<p>
+A popular technique to give bulk feedback is to send many emails with mail-merge. Except on the default Outlook install on windows IT have <a href="https://social.technet.microsoft.com/Forums/ie/en-US/28a44401-4b95-48af-b38b-f33cf91f6910/mail-merge-asking-permission-to-quotallowquot-word-to-access-outlook?forum=officesetupdeploylegacy">disabled mail-merge</a> - so write scripts!
+<h2>SIS (previously EDASS)</h2>
+To edit the number (or weightings) of courseworks and exam questions, you should do this in SIS (note the "Add Coursework" button in the below image).
+</p>
+
+<p>
+To upload exam paper drafts:
+<ul>
+ 	<li>From <a href="https://sis.engineering.leeds.ac.uk/">SIS home</a>, select Computing, then <em>Taught student records</em></li>
+ 	<li>Click  Assessment and examinations menu, then Access assessment materials repository</li>
+ 	<li>Then <em>upload a file, </em>and select your course and give a reason (mostly ignored).</li>
+ 	<li>When I uploaded docx files, they asked for PDFs (despite them providing docx templates....)</li>
+</ul>
+</p>
+
+<p>
+For entering exam marks into SIS, you can export/import an excel sheet:
+<ol>
+ 	<li>From <a href="https://sis.engineering.leeds.ac.uk/">SIS home</a>, select Computing, then <em>Taught student records</em></li>
+ 	<li>click <em>Enter Marks</em></li>
+ 	<li>click your module name</li>
+ 	<li>click <em>coursework marking</em> (or <em>examination marking</em>)</li>
+ 	<li>check all the boxes and click <em>export marks</em>:</li>
+</ol>
+</p>
+
+<p>
+<a href="Untitled-1.jpg"><img class="aligncenter size-full wp-image-628" src="Untitled-1.jpg" alt="magic SIS checkboxes" width="484" height="200" /></a>
+<ol start="6">
+ 	<li>edit the downloaded spreadsheet using your favourite script etc...</li>
+ 	<li>when done, use<em> Choose file / Import marks</em> to pull back into minerva.</li>
+ 	<li>if you have to do this twice, it might ask you to check a "confirm" box for every change. If you have 250 students and 3 bits of coursework, you <em>will</em> have to click 750 boxes....</li>
+ 	<li>when done for CW+exam, click <em>calculate grades</em></li>
+ 	<li>update the final values (this is when you replace the grade with "AB" if they missed the exam).</li>
+ 	<li>click the <em>finalise grades</em> button to signal that you're happy with the results.</li>
+</ol>
+</p>
+
+<p>
+In SIS and coursework:
+<ul type="disc">
+ 	<li>Where a student has not submitted a piece of coursework '-' should be marked against that component.</li>
+ 	<li>Where a student has had an exemption from a piece of coursework '*' should be marked against that component.</li>
+ 	<li>If the student did not submit any coursework, calculate the final grade, then record 'AB' in the final "Hand Edited Grade" column.</li>
+</ul>
+For examination marks in SIS:
+<ul type="disc">
+ 	<li>Use '-' for questions that weren't answered.</li>
+ 	<li>Students who did not attend the examination should be marked as ‘AB’ in the final grade (after you have <em>calculated grades</em>, you can then access the final (cw+exam) ) column <em>Hand Edited Grade</em> – the system remembers the CW grades as well even if you overwrite with AB.</li>
+</ul>
+</p>
+
+<p>
+Here is a <a href="https://vcg.leeds.ac.uk/wp-content/uploads/2020/02/template2.xls">spreadsheet</a> I have previously used to import Minerva coursework grades into SIS.  It uses the SID to align the rows correctly (you might have different students in SIS and Minerva....). If you copy and paste the Minerva and SIS spreadsheets into it, the green coursework grades should be in the right order to copy and paste into the SIS spreadsheet. You will need to adjust it for number of courseworks etc...
+</p>
+
+<p>
+If you can write java, here is a <a href="https://github.com/twak/leeds_grader/">project</a> I'm working on which is a fast-page-turner and minerva-spreadsheet wrangler for coursework. It's just getting going and you'll have to ask me for permission.
+</p>
+
+<p>
+Group-work is a good way to manage huge class sizes.  Instructions <a href="https://www.leeds.ac.uk/vle/staff/collab/groups/">here</a> (click "other groups") for creating a bunch of groups and doing random allocation (everyone complains) or letting students sign up themselves (very good and very bad groups).
+</p>
+
+
+
+</body>
+</html>
