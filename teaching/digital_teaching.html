@@ -19,6 +19,11 @@
   <a href=""><b>OBS</b></a> Opensource software which allows you to combine multiple video source (powerpoint, video, screen capture, multiple cameras) and stream at the same time as recording (i.e. to upload to MS Stream).
   <ul>
     <li>The <a href="https://obsproject.com/forum/resources/obs-virtualcam.949/">virtual cam</a> addon allows you to add a virtual webcam to you pc - so Zoom/Teams can see the OBS output</li>
+    <li>I have to transcode the video saved by OBS before it would be accepted by Mediasite. IT aware and dismissed (INC0414157).
+      <pre>
+      ffmpeg -i "2020-09-28 08-57-35.mkv" -vcodec h264_nvenc out.mp4
+      </pre>
+    </li>
   </ul>
 </p>
   
