@@ -1,11 +1,15 @@
-
-
 <html>
+   <head> <meta name="viewport" content="width=device-width, initial-scale=1.0"> </head>
 <body>
+ <p><a href="../index.html">wiki home</a><p>
 
-<a href="https://www.hpc-uk.ac.uk/facilities/">UK general HPC facilities</a>
+<b> compute at leeds</b>. We note that Leeds' uses <i>cluster</i> to mean "lab" and <i>research compute</i> when they mean "cluster". (I mean technically, I guess we have clusters of urninals in many gent's bathrooms, I still wouldn't write cluster on the door.)
 
-Comparing different clusters is non-trivial. This table just counts the number of GPUs.
+Main compute resources are the local ARC, regional <https://docs.hpc.shef.ac.uk/en/latest/bede.html#>>Bede</a> (why Power9 <a href="https://www.n8research.org.uk/">N8</a>, why - what did IBM do to achieve this?!), and national <a href="https://docs.hpc.shef.ac.uk/en/latest/jade2.html">Jade 2</a> (not yet online as of March 2021).
+
+<a href="https://www.hpc-uk.ac.uk/facilities/">comparison of HPC facilities</a>
+
+Comparing different clusters is non-trivial. This table just counts the number of GPUs - this is normally what ML-eyd graphics-eyi people use. We note that server-side GPU is <a href="https://www.theregister.com/2018/01/03/nvidia_server_gpus/">expensive</a> pared to (gamer grade) local (under desk GPUs). Local is also much easier to debug (trying to debug something run with a <a href="https://gpuhackshef.readthedocs.io/en/latest/bede/scheduler.html">scheduler</a> is a nightmare).
 
 <table  border="1">
 <tr><td><b>institution</b></td><td><b>cluster</b></td><td><b>GPU hardware</b></td><td><b>GPU count</b></td></tr>
