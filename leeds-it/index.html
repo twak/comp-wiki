@@ -4,7 +4,7 @@
  <p><a href="../index.html">wiki home</a><p>
  
 <p>
-<strong>IT Tickets.</strong> Make all requests <a href="http://it.leeds.ac.uk">here</a> or <a href="mailto:leeds@service-now.com">email</a>. Use this for everything from "install a font" to "my mouse is broken" to "install XXX in Dec10". There is better interface to mange multiple requests <a href="https://it.leeds.ac.uk/home.do">here</a>.
+<strong>IT Tickets.</strong> Make all requests <a href="http://it.leeds.ac.uk">here</a> or <a href="mailto:leeds@service-now.com">email</a>. Use this for everything from "install a font" to "my mouse is broken" to "install XXX in Dec10". There is better interface to mange multiple requests <a href="https://it.leeds.ac.uk/home.do">here</a>. My experiences have generally been negative.
 </p>
 
 <p>
@@ -12,19 +12,19 @@
 </p>
 
 <p>
-<strong>Uptime</strong>. uptime systems <a href="https://it.leeds.ac.uk/it?id=services_status">here</a>.
+   <strong>Uptime</strong>. uptime systems <a href="https://it.leeds.ac.uk/it?id=services_status">here</a>.
 </p>
 
 <p>
-<strong>GPUs / clusters/ research computing</strong>. see my page <a href="compute.html">here</a>.
+   <strong>GPUs / clusters/ research computing</strong>. see my page <a href="compute.html">here</a>.
 </p>
   
 <p>
-<strong>Website</strong>. Edit your university (Jadu) webpage <a href="https://production2.leeds.ac.uk/eps/jadu/login?destination=%2Feps%2Fjadu%2Fcustom%2Fedit_my_staff_details.php">here</a>. It will be listed publicly <a href="https://eps.leeds.ac.uk/computing/stafflist">here</a>. It finds publications from Symplectic automatically. To advertise PhD projects on the<a href="https://phd.leeds.ac.uk/"> university's portal</a>, use <a href="https://production2.leeds.ac.uk/phd/jadu">this</a>. There is no way to list only your PhD projects... Both these system have a delay while marketing checks your content before uploading. Other Schools seeem to have <a href="http://homepages.see.leeds.ac.uk/~lecjm/">their</a> <a href="http://homepages.see.leeds.ac.uk/~mm16jdc">own</a> webpages (SoComputing lost the fight with IT on this one...).
+   <strong>Website</strong>. Edit your university (Jadu) webpage <a href="https://production2.leeds.ac.uk/eps/jadu/login?destination=%2Feps%2Fjadu%2Fcustom%2Fedit_my_staff_details.php">here</a>. It will be listed publicly <a href="https://eps.leeds.ac.uk/computing/stafflist">here</a>. It finds publications from Symplectic automatically. To advertise PhD projects on the<a href="https://phd.leeds.ac.uk/"> university's portal</a>, use <a href="https://production2.leeds.ac.uk/phd/jadu">this</a>. There is no way to list only your PhD projects... Both these system have a delay while marketing checks your content before uploading. Other Schools seeem to have <a href="http://homepages.see.leeds.ac.uk/~lecjm/">their</a> <a href="http://homepages.see.leeds.ac.uk/~mm16jdc">own</a> webpages (SoComputing lost the fight with IT on this one...).
 </p>
 
 <p>
-<strong>Group websites.</strong> Sites like this (vcg.leeds.ac.uk) are run by research groups. They are wordpress installs on <a href="https://wpengine.co.uk/">WPE</a>. They all use the uni's <a href="https://whs.leeds.ac.uk/user-guide/">theme</a>. Apply <a href="https://whs.leeds.ac.uk/">here</a>.
+   <strong>Group websites.</strong> Sites like <a href="vcg.leeds.ac.uk">vcg</a> are run by research groups. They are wordpress installs on <a href="https://wpengine.co.uk/">WPE</a>. They all use the uni's <a href="https://whs.leeds.ac.uk/user-guide/">theme</a>. Apply <a href="https://whs.leeds.ac.uk/">here</a>. IT charges the school £500 a year for the privilege of running your own WP plugins.
 </p>
 
 <p>
@@ -36,17 +36,21 @@
 </p>
 
 <p>
-<strong>Internet</strong>. Generally less than 100Mbs.
+<strong>2FA</strong>In 2021 Leeds introduced <a href="https://it.leeds.ac.uk/it/softcentre?id=kb_article_view&sys_kb_id=f919ec661b02e8102224eca13d4bcbca">Duo</a> for 2FA. Required for VPN + most microsoft services. You are expected to run this on your personal phone hardware.
+</p>
+   
+<p>
+<strong>Internet</strong>. Generally less than 100Mbs. Leeds uni IP block seems to be <em>129.11.0.0/16</em>.
 </p>
 
 <p>
 <strong>Remote access.</strong>
 <ul>
  	<li>Your desktop machine will have a <a href="http://mypc.leeds.ac.uk/">static ip</a>.</li>
- 	<li>Leeds uni IP block seems to be <em>129.11.0.0/16.</em></li>
- 	<li>Shell in from outside campus using <em>ssh scsxxx@remote-access.leeds.ac.uk  </em>You can then shell into most local machines.</li>
+ 	<li>Shell in from outside campus using <em>ssh scsxxx@remote-access.leeds.ac.uk  </em>You can then shell into most local machines. Duo required.</li>
  	<li>Tony recommends: <a href="https://mobaxterm.mobatek.net/">https://mobaxterm.mobatek.net/</a></li>
  	<li>VPN info (<a href="https://leeds.service-now.com/it?id=kb_article&amp;sysparm_article=KB0011026">win</a>, <a href="https://leeds.service-now.com/it?id=kb_article&amp;sysparm_article=KB0010377">osx</a>, linux info missing). Some services won't work over VPN (<a href="https://sis.engineering.leeds.ac.uk/">SIS</a>: yes; <a href="https://selfservice.mais.leeds.ac.uk:444/irj/portal">Mais</a>: no)</li>
+   <li>On windows I use a saved Putty profile (with <a href="https://devops.ionos.com/tutorials/use-ssh-keys-with-putty-on-windows/">key on server</a>) and have a second browser <a href="https://linuxize.com/post/how-to-setup-ssh-socks-tunnel-for-private-browsing/">SOCKS tunnel</a> through</li>.
  	<li><a href="https://leeds.service-now.com/it?id=kb_article&amp;sysparm_article=KB0011016">Desktop anywhere</a> is a desktop windows remote.</li>
 </ul>
 </p>
