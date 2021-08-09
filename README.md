@@ -1,3 +1,3 @@
 # unofficial school-of-computing wiki for Leeds.
 
-source for [leedsac.uk](leedsac.uk)
+source for [https://leedsac.uk](leedsac.uk)
