@@ -24,7 +24,17 @@
 <p>
   <a href=""><b>OBS</b></a> Opensource software which allows you to combine multiple video source (powerpoint, video, screen capture, multiple cameras) and stream at the same time as recording (i.e. to upload to MS Stream).
   <ul>
+    <li>I ended up sidestepping the <strike>train wreck</strike>usability issues of Mediasite. I use an approach which touches Leeds' infrastructure as little as possible:
+      <ul>
+        <li>record the live session using something like OBS (finer grain video and audio controls, higher framerates, better CDN, and resolutions over Mediasite)</li>
+	      <li>create a channel for your Teams group on <a href="https://web.microsoftstream.com/">MS Stream</a> (better & faster encoding, better UI for students, AI subtitles, works in China)</li>
+        <li>upload the video to the new channel</li>
+        <li>check that the video is shared with the channel as "Display" and not "Owner" - otherwise the students can edit</li>
+	      <li>add a link in the Minerva sidebar to the new channel (in place of the Mediasite one).</li>
+      </ul>
+  </li>
     <li>The <a href="https://obsproject.com/forum/resources/obs-virtualcam.949/">virtual cam</a> addon allows you to add a virtual webcam to you pc - so Zoom/Teams can see the OBS output</li>
+    <li>Here's an <a href="ident.mp4">animated logo</a> and regular <a href="logo.svg>logo</a> to look fancy. Add it in the Source window as a `media source`. Easier to use than the login-then-refuse-download of the <a href="https://imagelibrary.leeds.ac.uk/asset-bank/action/viewAsset?id=26990&index=5&total=33&view=viewSearchItem">official logo files</a></li>
     <li>I have to transcode the video saved by OBS before it would be accepted by Mediasite. IT aware and dismissed (INC0414157).
       <pre>
       ffmpeg -i "2020-09-28 08-57-35.mkv" -vcodec h264_nvenc out.mp4
@@ -35,6 +45,8 @@
   
 <p>
   <b> <a href="https://web.microsoftstream.com/">MS Streams</a></b>. (sign in with UoL account). A streaming platform which works better than Mediasite, but without all the nice integration with lecture-theatre cameras. Faster upload/encoding/captions etc... Good integration with MS Teams.
+        <ul>
+    <li>
  </p>  
   
 <p>
