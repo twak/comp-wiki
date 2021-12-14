@@ -1,0 +1,459 @@
+\documentclass[]{article}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{float}
+\restylefloat{figure}
+
+\lstset{frame=tb,
+	language=Bash,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	breaklines=true,
+	breakatwhitespace=false,
+	tabsize=3,
+	literate={-}{-\allowbreak}1
+}
+
+%opening
+\title{Cheat Sheet: High-Performance Computing at the University of Leeds}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Introduction}
+
+This cheat sheet is intended for new users of HPC at the University of Leeds. This is not intended to replace the useful links and training courses provided by HPC, which are included below:
+
+\begin{itemize}
+	\item \href{http://arc.leeds.ac.uk/}{ARC Advanced Research Computing website}
+	\item \href{http://arc.leeds.ac.uk/training/}{ARC Training Courses} 
+	\item \textbf{Any questions related to ARC usage should be sent to  arc-help@lists.leeds.ac.uk}
+\end{itemize}
+
+This document is intended to get researchers started with HPC, and does not assume that readers have prior knowledge of command line, Linux or containers; however, neither does it provide a detailed explanation of them. It will show you how to run the commands and explain what they do.
+
+You will need an ARC account in order to access ARC resources. You can apply for one here: \href{http://arc.leeds.ac.uk/apply/}{apply for ARC account}.
+
+\section{Logging in and basics}
+
+\subsection{How to log in}
+
+Suppose you want to log onto ARC3. Open a terminal and type:
+
+\begin{lstlisting}
+ssh sc16rsmy@arc3.leeds.ac.uk
+\end{lstlisting}
+
+Replace \(sc16rsmy\) with your own user name. You will be prompted for your University account password. If login is successful, you will see:
+
+\begin{lstlisting}
+Last login: Fri Nov 23 19:38:06 2018 from vpn-host-40-024.leeds.ac.uk
+
+Advanced Research Computing Node 3 (arc3)
+________________________________________________________________________
+
+Information on using this facility may be obtained at the following URL:
+http://www.arc.leeds.ac.uk
+
+Please remember to acknowledge the use of ARC facilities in your
+papers; details are on the website above.
+________________________________________________________________________
+
+[sc16rsmy@login2.arc3 ~]$ 
+\end{lstlisting}
+
+There are two name nodes, or ``master servers" that keep track of the whole cluster and keeps the file system. When you login, you will be on either \(login1\) or \(login2\). It doesn't really matter which.
+
+\subsection{Where is everything}
+
+By default, once you log in, you are in your home directory. You can view the directory you are in by using the Linux \(pwd\) or ``print working directory" command:
+
+\begin{lstlisting}
+[your_username@login2.arc3 ~]$ pwd
+/home/home02/sc16rsmy
+\end{lstlisting}
+
+This is your \textbf{home directory}. You can create or move files and folders here. You will put all the scripts or code you want to run here. However, if you are using large amounts of data, you should NOT store them in your home directory. Home directories have a soft memory quota of 5GB, and a hard quota of 10GB. You can exceed the soft quota for about a week; if you exceed the hard quota you will be denied any resource requests.
+
+You can easily view how much memory you have used using the Linux \(quota\) command:
+
+\begin{lstlisting}
+[sc16rsmy@login2.arc3 ~]$ quota
+Disk quotas for user sc16rsmy (uid 426110): 
+Filesystem  blocks   quota   limit   grace   files   quota   limit   grace
+nas-ufaservn1:/export/home/home02
+3080372  10485760 11534336            9019       0       0        
+\end{lstlisting}
+
+You should keep any large amounts of data in the \(/nobackup\) directory. This is the shared parallel file system with 836TB of shared memory across all users. There is no quota but files unused after 90 days will be deleted (ARC will send you a warning email first), and if you use too much memory then you may get an email asking you to use less.
+
+Navigate to the  \(/nobackup\) folder using the \textit{cd} change directory Linux command:
+
+\begin{lstlisting}
+[sc16rsmy@login2.arc3 ~]$ cd /nobackup
+[sc16rsmy@login2.arc3 nobackup]$ 
+\end{lstlisting}
+
+If you haven't already, you should make yourself a directory here, and give it \textbf{the same name as your user name}. You will have read and write privileges inside the folder you create, so you can put all your data here. Make a directory using the \textit{mkdir} Linux command:
+
+\begin{lstlisting}
+[sc16rsmy@login2.arc3 nobackup]$ mkdir your_username
+[sc16rsmy@login2.arc3 nobackup]$ cd your_username/
+[sc16rsmy@login2.arc3 your_username]$ pwd
+/nobackup/your_username
+\end{lstlisting}
+
+Put any big data, log files, checkpoints, etc. in here.
+
+Note that data is not backed up, so keep an extra copy elsewhere in the unlikely event that anything happens to it. Other users can read other people's files in the \(/nobackup\) directory but cannot alter them.
+
+\subsection{How do I get files to ARC?}
+\label{scp}
+
+You have several options. If you are moving code or scripts which may frequently change, it is suggested to use a versioning control system such as \href{https://git-scm.com/}{Git} or \href{https://subversion.apache.org/}{SVN}. You will make your changes and tests on your local environment, and pull changes onto the remote environment on ARC.
+
+If you are moving a lot of files to your \(/nobackup\) directory, then you may want to use Secure Copy Protocol instead. You usually use SCP from your local machine. Suppose you are in the directory on your local machine which contains data you want to move to ARC. From the terminal, type:
+
+\begin{lstlisting}
+$ scp * sc16rsmy@arc3.leeds.ac.uk:/nobackup/sc16rsmy/
+sc16rsmy@arc3.leeds.ac.uk's password: 
+test1.txt                          100%   49     0.1KB/s   00:00    
+test2.txt                          100%   49     0.1KB/s   00:00    
+test3.txt                          100%   49     0.1KB/s   00:00
+\end{lstlisting}
+
+This copies all the files from the current directory onto ARC \(/nobackup/sc16rsmy/\).
+
+\subsection{I need software/package X. How do I get it?}
+
+First, check that it's not already available on the system. Check here: \href{http://arc.leeds.ac.uk/software/}{ARC Software} for the list of applications, libraries, software, and programming languages you can load. If it's not there, I would suggest checking anyways to see if it's there but not on the website (it does happen):
+
+\begin{lstlisting}
+$ module avail
+\end{lstlisting}
+
+If it's still not listed, then it's really not there. You have a few options depending on what exactly you need:
+
+\subsubsection{I need a Python package}
+
+You can either install it yourself using pip and the \(--user\) flag:
+\begin{lstlisting}
+$ pip install —user name_of_package
+\end{lstlisting}
+
+Or with miniconda (but be aware that miniconda is separate from the the system versions of everything including the python interpreter, so you will need to install your own copies of everything through conda):
+\begin{lstlisting}
+$ conda install name_of_package
+\end{lstlisting}
+
+\subsubsection{I need a software or application X}
+
+Again, first check that it's not already there. If it isn't, then email arc-help@lists.leeds.ac.uk to see if it is already in an existing container, or what they suggest is the best way to install it.
+
+\section{Containers}
+
+If you have a unique set of packages/software/configurations that you need, it may be easiest to use a container. A container, simply speaking, is an isolated environment in which you can install anything you need without the risk of relying on system libraries that may change version, or may be the wrong version you need. You have full control over what is installed and available in a container. Example containers include Docker\footnote{\url{https://www.docker.com/}} and Singularity\footnote{\url{https://www.sylabs.io/}}. On ARC computers, you are allowed to run pre-built containers for your research. In this section, you are going to be introduced to the general steps you will take to get your container working on ARC.
+
+You will need Docker installed on your local machine to be able to customize and build Docker containers. Using Singularity also requires that you install it on your local machine. However, if you are only interested in building your container using Singularity (or more commonly used approach of bootstrapping a docker image in your singularity recipe file), you will not need to install Docker on your local machine. You only need Docker if you want build Docker images. In the following sections, we give general guidelines for building your custom Docker container and converting it to a singularity image. After that, we then show how to bootstrap a Docker image and use it to build a Singularity container (we use this approach to build a Pytorch singularity container).
+
+%Say, you want to use Pytorch for your research in deep learning. Since there is no Pytorch module on ARC, and training deep neural network on your local machine will probably take eons for you to get some network for you to work with, why not build a Pytorch singularity container on your local machine then ``scp'' it to ARC for training?
+
+\subsection{How to build one}
+
+If you are not familiar with containers, it is highly recommended to attend an ARC training course on containers. 
+
+Otherwise, if you already are familiar with containers, then the recommended work-flow is as follows:
+\subsubsection{Converting your Docker Image to Singularity}
+
+\begin{enumerate}
+	\item In your local environment (ideally, a VM or environment you can test in), create a custom Docker or Singularity file. ARC uses Singularity because it has better security; however, it is easy to convert a Docker image\footnote{There are hosts of Docker image files on Docker  Hub, \url{https://hub.docker.com/}} file to a Singularity.
+	
+	An easy way to start is to find a Docker file on \href{https://hub.docker.com/}{Docker Hub} which contains the primary packages you need. You can then use it as a base to create your own.
+	
+	\item Test your environment thoroughly to make sure it contains everything you need. TODO: Simon to help write more details on this!
+	
+	\item Convert your Docker file to a Singularity file using a conversion script, located here: \href{https://github.com/singularityware/docker2singularity}{docker2singularity}
+	
+	\item Move your Singularity image file to ARC using scp (see previous section \ref{scp}). Container files are usually put in /nobackup/containers, and are available to be used by all users (note that multiple instances of a single container can be used at once).
+\end{enumerate}
+
+Any time you need to change your environment, you will need to rebuild your image file on your local environment, and copy the generated image file to ARC. Users do not have permissions to rebuild image files directly on ARC. If you anticipate making frequent changes to your container, you can consider making the container writeable, using the \(--writable\) flag. This is NOT recommended for regular work flow.
+
+\subsubsection{Building Custom Singularity Containers}
+Sometimes, you may not find a singularity container\footnote{search for singularity containers at \url{https://singularity-hub.org/collections}} that meets your specification, and you will need to build one yourself. Also, you may want to modify a Docker image in Singularity before you use it on ARC. In this section, you will find some guidelines to build your own by walking you through how to build a Pytorch container.
+General Steps are:
+\begin{enumerate}
+	\item Install Singularity on your local machine
+	\item Create a singularity recipe file\footnote{For detailed information about how to create recipe files: \url{https://singularity.lbl.gov/docs-recipes}}. The example below:
+	\begin{enumerate}
+		\item Bootstraps an Ubuntu 16.04 container from Docker hub
+		\item `posts' all the command line arguments needed for installing Pytorch on an Ubuntu 16.04 machine. Note that we needed to install \emph{Python3} and \emph{pip3} first before installing \emph{Pytorch} using pip3. The `\%post' section usually contains all the terminal commands your software needs in order for it to be installed. You will need to install all dependencies for your software as well. Also note that when using `apt-get', you should add the `-y' tag, so that your software will install without needing you to type `yes' to approve its installation. On a final note, sometimes, you may need to create folders within your container that `binds' to actual file locations on the local machine it is being run on. This is not a requirement for Pytorch, but if you get complaints from your built container that a particular folder location is not found, you should create it within your `\%post' section.
+		\item Sometimes, your software may need you to manually set some environment variables. The appropriate place to do this is under your `\%environment' section.
+		
+		\item in the `\%runscript' section, you specify how you want your container to be run. Here, we just specified that your container should accept all the commands parsed to it from the terminal.
+	\end{enumerate}
+	\begin{minipage}{\textwidth}
+		\lstinputlisting[breaklines]{pytorch-pip}
+	\end{minipage}
+	\item Build the singularity image/container:
+	\begin{lstlisting}
+		sudo singularity build <image-name> <recipe-file>
+	\end{lstlisting}
+	So if we name our Pytorch container `pytorch100-cuda90.simg' and the recipe file we created in earlier as `pytorch-pip', the command to build it is:
+	\begin{lstlisting}
+		sudo singularity build pytorch100-cuda90.simg pytorch-pip
+	\end{lstlisting}
+	\item (optional) create a test script to test if your pytorch container has access to GPU
+	
+	\begin{minipage}{\textwidth}
+		\lstinputlisting{cuda_test.py}
+	\end{minipage}
+	\item copy the Singularity image and optional test script to HPC (into your nobackup folder)
+	\begin{lstlisting}
+		scp pytorch100-cuda90.simg cuda_test.py username.arc3.leeds.ac.uk:/nobackup/username
+	\end{lstlisting}
+	\item To test if your container works correctly on HPC, you should request an interactive shell on HPC, load singularity and cuda modules, then run/execute the container.
+	In the example that follows, the `singularity exec...' executes our singularity container. The `--nv' allows your container to have access to GPU if available; `-B' binds a folder on the host system (HPC in this case) to a folder location in the container, here we bind the /nobackup/username/ location on HPC to the /mnt location/folder/directory in our Pytorch container. The next term is the Singularity image/container we want to execute `pytorch100-cuda90' after which we tell it which command to execute in it `python3 /mnt/cuda\_test.py'. Here, the path to the python script is accessed through the directory we've bound to /nobackup/username (location of the script on our HPC)
+	\begin{minipage}{\linewidth}
+		\begin{lstlisting}
+		qrsh -l coproc_k80=1,h_rt=0:10:0 -pty y /bin/bash -i
+		
+		module load singularity
+		module load cuda
+		
+		singularity exec --nv -B /nobackup/username/:/mnt pytorch100-cuda90.simg python3 /mnt/cuda_test.py
+		\end{lstlisting}
+	\end{minipage}
+	If you get `cuda is available' response on your shell from cuda\_test.py, then you now have pytorch container with access to GPU on HPC.
+\end{enumerate}
+%\subsection{How to use one}
+%
+%You can now run your scripts inside your container; for example, using the deeplearn\_1\_gpu.img container:
+%
+%\begin{lstlisting}
+%$ singularity exec --nv --bind /nobackup/:/nobackup
+%/nobackup/containers/deeplearn_1_gpu.img
+%python my_python_script.py param1 param2
+%\end{lstlisting}
+%
+%If you would like to run a Jupyter notebook inside a container, see section \ref{jupyter}.
+%
+%Please note that you may be able to use an already existing container instead of building your own; but to have complete control at any time over your environment, you will want to build your own image file.
+
+\section{The scheduler}
+\subsection{Request an interactive session}
+
+Now that you are familiar with the name nodes, let's consider resources: CPU's, or GPU's. The resources available differ depending on the system, which you can see on the ARC website.
+
+Using ARC3 as an example, there are k80's and p100's available. There are 2 k80's per machine, or 4 p100's. You can request an interactive session on one of these resources as follows:
+
+\begin{lstlisting}
+[sc16rsmy@login1.arc3] ~$ qrsh -l coproc_k80=1,h_rt=3:0:0 -pty y /bin/bash -i
+\end{lstlisting}
+
+\begin{itemize}
+	\item \textbf{coprok\_k80} indicates a resource request for half GPU, which on ARC3 is 12 cores, 64 GB and one k80. If you request two, you will be using the entire GPU. It is good practice to request only what you need.
+	\item \textbf{h\_rt} is hard runtime, requesting usage for a specific length of time (hh:mm:ss). The maximum time allowed is 48 hours (48:00:00). Your session will exit automatically after the time runs out.
+	\item \textbf{-pty} makes the scheduler allocate the GPU to you.
+	\item \textbf{/bin/bash} links the session to the right bash directory.
+\end{itemize}
+
+If the request was successful, you will see your prompt change to the machine you are now on:
+
+\begin{lstlisting}
+[sc16rsmy@db12gpu1.arc3] ~$
+\end{lstlisting}
+
+If you are on a GPU resource, make sure to load the \(cuda\) module in order to use the GPU:
+
+\begin{lstlisting}
+[sc16rsmy@db12gpu1.arc3] ~$ module load cuda
+\end{lstlisting}
+
+\subsection{Submit a job}
+
+For most jobs, you won't want an interactive session; you'd rather queue up the job and be informed when it has finished. First, put everything that is needed to set up your environment and run your code in a Bash script. Suppose I want to run a Python file which trains a model. I create a new script, containing:
+
+\begin{lstlisting}
+#!/bin/bash
+
+# Prepare environment
+module load cuda
+module load python
+module load python-libs/3.1.0
+
+# Python script with all parameters
+python ../code/train_model.py 0 1e-4 2000 15                      
+\end{lstlisting}
+
+Now I can queue up this job to be run. The parameters for \(qsub\) are the same as for \(qrsh\):
+
+\begin{lstlisting}
+$ qsub -cwd -V -l coproc_p100=1 -l h_rt=2:00:00 -m be train_model.sh
+\end{lstlisting}
+
+There are a few new parameters:
+\begin{itemize}
+	\item \textbf{-cwd} executes the script from the current working directory
+	\item \textbf{-V} verbose output
+	\item \textbf{-l} allows specifying the resource type (i.e., coproc\_p100=1)
+	\item \textbf{m} look for mail options
+	\item \textbf{b} send the user (by default, the user name printed when typing the Linux \(whoami\) command, \@leeds.ac.uk) at the \textit{beginning} of the job, when it is started
+	\item \textbf{e} send the user an email when the job is completed. You may replace ``be" with ``n" if you do not want to receive any emails.
+\end{itemize}
+
+Optionally, you may put the \(qsub\) parameters \textbf{inside} the Bash script itself. The following results in the same outcome:
+
+\begin{lstlisting}
+#!/bin/bash
+#$ -cwd
+#$ -V
+#$ -l coproc_p100=1
+#$ -l h_rt=2:00:00
+#$ -m be
+
+# Prepare environment
+module load cuda
+module load python
+module load python-libs/3.1.0
+
+# Python script with all parameters
+python ../code/train_model.py 0 1e-4 2000 15         
+\end{lstlisting}
+
+And then run the script simply with:
+
+\begin{lstlisting}
+$ qsub train_model.sh             
+\end{lstlisting}
+
+\subsection{View resource status}
+
+You can tell the status of all submitted jobs using the \(qstat\) command:
+
+\begin{lstlisting}
+[sc16rsmy@db12gpu1.arc3] ~$ qstat
+Job ID      Username  Queue         Jobname     Limit  State 
+-----------------------------------------------------------
+240         sc16rsmy    db12            foo.sh        27:00   q     
+379         sc16rsmy    db08           boo.sh        27:00   r   
+\end{lstlisting}
+
+A job state of ``w" means that the job is getting queued up; ``q" means that the job is waiting in the queue. A state of ``r" means that it is running. You can manually terminate a job:
+
+\begin{lstlisting}
+[sc16rsmy@db12gpu1.arc3] ~$ qdel job_id
+\end{lstlisting}
+
+\section{Using a Jupyter notebook}
+\label{jupyter}
+
+If you want to test or play around with code on a GPU, with a graphical user interface, you can run it inside (or outside of) a container. This example shows how to set up a notebook inside a resource using the deeplearn\_1.img container.
+
+First, we will request an interactive session with half a GPU:
+
+\begin{lstlisting}
+[sc16rsmy@login2.arc3] ~$ qrsh -l coproc_k80=1,h_rt=1:0:0 -pty y /bin/bash –i
+[sc16rsmy@db12gpu1.arc3] ~$
+\end{lstlisting}
+
+In this example, I was allocated db12gpu1. Next, load the modules you need. In this case, I will load singularity because I will be running the notebook inside a container:
+
+\begin{lstlisting}
+module load cuda
+module load singularity
+\end{lstlisting}
+
+Finally, start the Jupyter notebook inside a singularity shell, without a browser:
+
+\begin{lstlisting}
+singularity shell --nv /nobackup/containers/deeplearn_1.img -c "export XDG_RUNTIME_DIR="";/opt/conda/bin/jupyter notebook --notebook-dir=$HOME --ip='*' --port=8887 --no-browser"
+\end{lstlisting}
+
+Note the port name which you have chosen; in this case, 8887. The port needs to be unique. If you get a permissions error, you may have forgotten the --nv flag and the export command. 
+
+Now, in a separate terminal window from your local machine (NOT logged on to ARC), forward the port to your local machine port:
+
+\begin{lstlisting}
+$ ssh -L 11111:db12gpu1:8887 sc16rsmy@arc3.leeds.ac.uk
+\end{lstlisting}
+
+Replace db12gpu1 with the GPU you were assigned, and change sc16rsmy to your user name. It will ask for your password and if successful, will log you into ARC.
+
+Now, navigate to your local browser at the port you specified. You should see the Jupyter notebook appear as shown below:
+
+\begin{figure}[H]
+	\includegraphics[width=\linewidth]{jupyter.png}
+	\caption{The notebook running inside the container on ARC3, accessed from your local browser.}
+\end{figure}
+
+Note that it is also possible to run a Jupyter notebook outside of a container (load the modules you need before starting the notebook), and on the name node. For example, if you do not need a GPU and simply want to edit some code using a GUI, you may run the notebook directly on a name node. 
+
+\section{CPU-only I/O tasks}
+
+Sometimes you may want to do tasks which are primarily I/O (i.e., reading and writing files, but not doing much calculation on anything.) These kind of tasks require no GPU, but may take awhile. You may run these on the name nodes directly, but be careful not to hog the CPU since other users may be using them. The following two sections are tips about how to do such tasks in a nice way (for yourself and for others).
+
+\subsection{screen}
+
+Suppose you want to do some long I/O task specified in a Bash script, such as copying lots of data back and forth from somewhere. You may not want to stay logged in the entire time, and don't want to risk losing network or connection and having to restart the script. You can use the Linux \href{https://www.rackaid.com/blog/linux-screen-tutorial-and-how-to/}{screen} command:
+
+\begin{lstlisting}
+$ screen
+\end{lstlisting}
+
+It will clear your window and environment. Now, run the script:
+
+\begin{lstlisting}
+$ ./long_task_x.sh
+\end{lstlisting}
+
+To detach from the screen, type Ctrl+A d. You will see:
+
+\begin{lstlisting}
+[detached from 84519.pts-46.login1]
+\end{lstlisting}
+
+You can view all the active screens using the \(screen -ls\) command:
+\begin{lstlisting}
+$ screen -ls
+There is a screen on:
+84519.pts-46.login1	(Detached)
+1 Socket in /var/run/screen/S-sc16rsmy.
+\end{lstlisting}
+
+To re-attach to the first screen, type:
+\begin{lstlisting}
+$ screen -r screen_ID
+\end{lstlisting}
+
+If you do not provide a screen ID, it will automatically re-attach you to the first screen. Once you have detached from a screen, you can log out from ARC, turn off your computer, and do anything you like. You can log back in and re-attach to it later.
+
+\subsection{Being nice}
+
+To not hog CPU on a name node, you may want to use \(nice\). \href{https://en.wikipedia.org/wiki/Nice_(Unix)}{Nice} is a Linux command which assigns priorities to jobs; i.e, if you are running a long I/O task and no one else is using the server, you can have all the CPU; otherwise, if it's being used a lot, your task will be assigned a lower CPU priority so as not to hog all the resource.
+
+You can read about what priority to use here: \href{https://en.wikipedia.org/wiki/Nice_(Unix)}{about Nice}
+
+\begin{lstlisting}
+nice -n 10 python my_long_script.py
+\end{lstlisting}
+
+Like any other command, nice can be used inside of a screen.
+
+\section{Conclusion}
+
+This document was written by Rebecca Stone, with help from Martin Callaghan, Mark Dixon, Simon Obute, and Leo Pauly.
+
+Please contact ARC staff directly for any specific issues related to ARC usage.
+
+\end{document}
+
+
