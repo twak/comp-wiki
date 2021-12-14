@@ -93,6 +93,15 @@ If you can write java, here is a <a href="https://github.com/twak/leeds_grader/"
 Group-work is a good way to manage huge class sizes.  Instructions <a href="https://www.leeds.ac.uk/vle/staff/collab/groups/">here</a> (click "other groups") for creating a bunch of groups and doing random allocation (everyone complains) or letting students sign up themselves (very good and very bad groups).
 </p>
 
+<p>
+ <emph>APIs</emph>. This is untested at scale:
+<ul>
+ <li>Minerva is based on blackboard with a <a href="https://developer.blackboard.com/portal/displayApi">publically documented api</a></li>
+ <li>You can make calls to the api hosted using something like <a href="https://minerva.leeds.ac.uk/learn/api/public/v1/users/uuid:1685a1db54624968890005818dce9398/courses">this</a> when logged into 'erva</li>
+ <li>You can scrape a session access token using Chrome + network view + viewing the grade centre. Search for something like "tokeninfo?=accesstoken="</li>
+</ul>
+</p>
+
 
 
 </body>
